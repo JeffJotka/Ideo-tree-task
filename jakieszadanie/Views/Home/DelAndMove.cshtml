@@ -1,0 +1,40 @@
+﻿@model jakieszadanie.Models.DelAndMove
+
+@{
+    ViewData["Title"] = "Usuń i przenieś";
+}
+<h3>@ViewData["Title"]</h3>
+<div class="viewcontainer">
+    <div>
+        <h4>Usuniesz: @ViewData["Parent"]</h4>
+        <h4>Requires change of parent:</h4>
+        <ul>
+            @foreach (var child in ViewBag.children)
+            {
+                <li>@child.Name</li>
+            }
+        </ul>
+        <hr />
+        <form asp-action="DeleteAndMove">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="NodeId" />
+            <div class="form-group">
+                <label asp-for="TargetId" class="control-label"></label>
+                <select asp-for="TargetId" class="form-control" asp-items="ViewBag.NodesSelectList">
+                    <option value="">Wybierz rodzica</option>
+                </select>
+                <span asp-validation-for="TargetId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Usuń ten węzeł i dzieci" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row p-3 justify-content-center">
+    <a class="btn btn-dark" asp-action="Index">Wróć do panelu zarządzania</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

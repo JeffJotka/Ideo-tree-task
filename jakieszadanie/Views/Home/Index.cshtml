@@ -1,0 +1,65 @@
+﻿@model List<jakieszadanie.Models.Node>
+
+@{
+    ViewData["Title"] = "Panel zarządzania";
+}
+<h3>@ViewData["Title"]</h3>
+
+<div class="row viewcontainer">
+    <div id="tree" class="col">
+        
+        <hr />
+        <div class="d-flex m-2">
+            <ul>
+                <tree-item class="item" :item="treeData" :expand="expand" :sortbyname="sortbyname"></tree-item>
+            </ul>
+            <div class="d-flex flex-column ml-auto">
+                <button v-on:click="expandtoggle">rozwiń/zwiń</button>
+                <button class="mt-1" v-on:click="sortbynametoggle">sortowanie</button>
+            </div>
+
+        </div>
+        </div>
+    </div>
+<div class="d-flex">
+    <a class="btn btn-dark" asp-action="Create">Stwórz</a>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="~/js/JavaScript.js"></script>
+    <script>
+
+    var app = new Vue({
+        el: "#tree",
+        data: {
+            treeData: [],
+            expand: sessionStorage.getItem('expand') === 'true',
+            sortbyname: sessionStorage.getItem('sortbyname') === 'true',
+            expandtext: "",
+        },
+        created: function () {
+            let serializedTree = '@Html.Raw(Json.Serialize(Model))';
+            this.treeData = JSON.parse(serializedTree);
+            this.treeData = this.treeData.$values[0];
+
+            if (this.expand) this.expandtext = "collapse all"
+            else this.expandtext = "expand all"
+        },
+        methods: {
+            expandtoggle() {
+                this.expand = !this.expand;
+                if (this.expand) this.expandtext = "collapse all"
+                else this.expandtext = "expand all"
+                sessionStorage.setItem('expand', this.expand);
+            },
+            sortbynametoggle() {
+                this.sortbyname = !this.sortbyname;
+                sessionStorage.setItem('sortbyname', this.sortbyname);
+            },
+        }
+       
+    });
+    </script>
+}
+

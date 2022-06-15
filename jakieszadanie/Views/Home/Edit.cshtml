@@ -1,0 +1,57 @@
+﻿@model jakieszadanie.Models.Node
+
+<div class="viewcontainer">
+    <div class="editcontent">
+        <h2>Update</h2>
+        <h4>@Model.Name</h4>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentId" class="control-label"></label>
+                <select asp-for="ParentId" class="form-control" asp-items="ViewBag.ParentId">
+                </select>
+                <span asp-validation-for="ParentId" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="text-align:center">
+                <input type="submit" value="Save changes" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="editcontent">
+        <h2>Usuń</h2>
+        <hr />
+        <h4>@Model.Name</h4>
+        @if (ViewBag.hasChildren)
+        {
+            <hr />
+            <h4>Ta gałaź ma dziecko</h4>
+            <hr />
+            <h4>Usunąć gałąź i dziecko?</h4>
+        }
+        else
+        {
+            <hr />
+            <h4>Usunąć liść?</h4>
+        }
+        <div class="d-flex">
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </form>
+            
+        </div>
+    </div>
+</div>
+<div class="row p-3 justify-content-center">
+    <a class="btn btn-dark" asp-action="Index">Wróć do panelu zarządzania </a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
